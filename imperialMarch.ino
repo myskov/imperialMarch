@@ -25,10 +25,10 @@ int melody[] = {
 
 // note durations: 4 = quarter note, 8 = eighth note, etc.:
 int noteDurations[] = {
-  2, 2, 2, 3, 5, 3, /*pauses*/10, 3, 5, 2, /*pauses*/2,
-  2, 2, 2, 3, 5, 3, /*pauses*/10, 3, 5, 2, /*pauses*/2
+  25, 25, 25, 40, 60, 30, /*pauses*/120, 40, 60, 25, /*pauses*/25,
+  25, 25, 25, 40, 60, 30, /*pauses*/120, 40, 60, 25, /*pauses*/25
  };
-  
+int baseDuration = 10000;
 int noteCount = 22;
 
 void setup() {
@@ -41,7 +41,7 @@ void setup() {
       // to calculate the note duration, take one second 
       // divided by the note type.
       //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-      int noteDuration = 1000/noteDurations[thisNote];
+      int noteDuration = baseDuration/noteDurations[thisNote];
       tone(playpin, melody[thisNote],noteDuration);
 
       // to distinguish the notes, set a minimum time between them.
