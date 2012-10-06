@@ -73,10 +73,7 @@ void flashLeds(int noteNumber) {
 // main code
 // ======================================================
 void setup() {
-  
-    // iterate over the notes of the melody:
-      int playpin = 11;
-  
+      // iterate over the notes of the melody:  
       for (int thisNote = 0; thisNote < noteCount; thisNote++) {
 
       // to calculate the note duration, take one second 
@@ -101,18 +98,9 @@ void setup() {
       // stop the tone playing:
       noTone(playpin);
     }
-    
-    delay(1000);
 }
 
 void loop() {
   // no need to repeat the melody.
-  for(int pin = 1; pin < 14; ++pin) {
-      digitalWrite(pin, HIGH);   // turn the LED on (HIGH is the voltage level)
-      delay(500);      
-      // wait for a second
-      digitalWrite(pin, LOW);    // turn the LED off by making the voltage LOW
-      delay(500);               // wait for a second
-  }
 }
 
