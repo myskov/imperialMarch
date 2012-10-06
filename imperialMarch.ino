@@ -62,8 +62,8 @@ int melody[] = {
 
 // note durations: 4 = quarter note, 8 = eighth note, etc.:
 int noteDurations[] = {
-  25, 25, 25, 40, 60, 30, /*pauses*/120, 40, 60, 25, /*pauses*/25, 
-  25, 25, 25, 40, 60, 30, /*pauses*/120, 40, 60, 25, /*pauses*/25,
+  25, 25, 25, 40, 60, 30, /*pauses*/120, 40, 60, 26, /*pauses*/25, 
+  25, 25, 25, 40, 60, 30, /*pauses*/120, 40, 60, 26, /*pauses*/25,
  };
 
 int baseDuration = 10000;
@@ -129,13 +129,7 @@ void setup() {
       // play tone note for music
       tone(playpin, melody[thisNote], currentNoteDuration);
       
-      // to distinguish the notes, set a minimum time between them.
-      int pauseBeforeStopLed  = currentNoteDuration /* * 1.00*/;
-      delay(pauseBeforeStopLed);
-      // stop all leds
-      disableLeds();
-      
-      if(currentNoteDuration == 10000 / 25 && melody[thisNote] != 0)
+            if(currentNoteDuration == 10000 / 25 && melody[thisNote] != 0 )
       {
          if(turn % 2 == 0)
            Motor_Control(FORW,0,FORW,80);
@@ -144,14 +138,31 @@ void setup() {
            
            turn++;
       }
+      
+      // to distinguish the notes, set a minimum time between them.
+      int pauseBeforeMotor  = currentNoteDuration  * 0.3;
+      delay(pauseBeforeMotor);
+      
+      Motor_Control(FORW,0,FORW,0);
+      
+      int pauseBeforeStopLed  = currentNoteDuration  * 0.7;
+      delay(pauseBeforeStopLed);
+      // stop all leds
+      disableLeds();
+      
+      
        
       // the note's duration + 30% seems to work well:
       int pauseBeforeStopTone = currentNoteDuration * 0.30;
       delay(pauseBeforeStopTone);
       // stop the tone playing:
       noTone(playpin);
-      Motor_Control(FORW,0,FORW,0);
+      
     }
+    
+    Motor_Control(FORW,60,BACK,60);
+    delay(400);
+    Motor_Control(FORW,0,FORW,0);
 }
 
 void loop() {
