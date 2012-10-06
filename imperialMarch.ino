@@ -104,12 +104,20 @@ void flashLeds(int noteNumber) {
   }
 }
 
+//class helloworld()
+//{
+//}
+
 
 // ======================================================
 // main code
 // ======================================================
 void setup() {
-      unsigned char j;
+      
+}
+
+void loop() {
+  unsigned char j;
       for(j=4;j<=7;j++)
     pinMode(j,OUTPUT);
     int turn = 1;
@@ -160,12 +168,10 @@ void setup() {
       
     }
     
+    // turn around
     Motor_Control(FORW,60,BACK,60);
-    delay(400);
+    delay(350);
     Motor_Control(FORW,0,FORW,0);
-}
-
-void loop() {
-  // no need to repeat the melody.
+    delay(1000);
 }
 
