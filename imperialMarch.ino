@@ -16,7 +16,9 @@ This example code is in the public domain.
  
  */
  #include "pitches.h"
-
+ 
+ 
+// structs
 // notes in the melody:
 int melody[] = {
   NOTE_CS3, NOTE_CS3,NOTE_CS3, NOTE_C3, NOTE_CS4, NOTE_CS3, /*pauses*/0, NOTE_C3, NOTE_CS4 , NOTE_CS3, /*pauses*/0,
@@ -28,9 +30,48 @@ int noteDurations[] = {
   25, 25, 25, 40, 60, 30, /*pauses*/120, 40, 60, 25, /*pauses*/25,
   25, 25, 25, 40, 60, 30, /*pauses*/120, 40, 60, 25, /*pauses*/25
  };
-int baseDuration = 10000;
-int noteCount = 22;
 
+int baseDuration = 10000;
+const int noteCount = 22;
+const int ledsCount = 2;
+
+int leds[] = {
+  12, 13
+};
+
+int ledAccomponement[][noteCount] = {
+  /*red*/   { LOW , LOW , LOW , HIGH, LOW , HIGH, LOW, HIGH, LOW , HIGH, LOW,
+              LOW , LOW , LOW , HIGH, LOW , HIGH, LOW, HIGH, LOW , HIGH, LOW },
+  /*green*/ { HIGH, HIGH, HIGH, LOW,  HIGH, LOW,  LOW, LOW , HIGH, LOW , LOW,
+              HIGH, HIGH, HIGH, LOW,  HIGH, LOW,  LOW, LOW , HIGH, LOW , LOW }
+};
+
+
+// definitions
+int noteDuration(int noteNumber) {
+  return baseDuration/noteDurations[noteNumber];
+}
+
+void disableLeds() {
+  for(int pinNumber = 0; pinNumber < ledsCount; ++pinNumber) {
+    int pin = leds[pinNumber];
+    digitalWrite(pin, LOW);    // turn the LED off by making the voltage LOW
+  }
+}
+
+void flashLeds(int noteNumber) {
+  for(int pinNumber = 0; pinNumber < ledsCount; ++pinNumber) {
+    int pin = leds[pinNumber];
+    int signal = ledAccomponement[pinNumber][noteNumber];
+    
+    digitalWrite(pin, signal);    // turn the LED off by making the voltage LOW
+  }
+}
+
+
+// ======================================================
+// main code
+// ======================================================
 void setup() {
   
     // iterate over the notes of the melody:
@@ -41,16 +82,24 @@ void setup() {
       // to calculate the note duration, take one second 
       // divided by the note type.
       //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-      int noteDuration = baseDuration/noteDurations[thisNote];
-      tone(playpin, melody[thisNote],noteDuration);
+      int currentNoteDuration = noteDuration(thisNote);
+      
+      // flash by led in accomponement to music
+      flashLeds(thisNote);
+      // play tone note for music
+      tone(playpin, melody[thisNote], currentNoteDuration);
 
       // to distinguish the notes, set a minimum time between them.
+      int pauseBeforeStopLed  = currentNoteDuration /* * 1.00*/;
+      delay(pauseBeforeStopLed);
+      // stop all leds
+      disableLeds();
+      
       // the note's duration + 30% seems to work well:
-      int pauseBetweenNotes = noteDuration * 1.30;
-      delay(pauseBetweenNotes);
+      int pauseBeforeStopTone = currentNoteDuration * 0.30;
+      delay(pauseBeforeStopTone);
       // stop the tone playing:
       noTone(playpin);
-      
     }
     
     delay(1000);
@@ -58,4 +107,12 @@ void setup() {
 
 void loop() {
   // no need to repeat the melody.
+  for(int pin = 1; pin < 14; ++pin) {
+      digitalWrite(pin, HIGH);   // turn the LED on (HIGH is the voltage level)
+      delay(500);      
+      // wait for a second
+      digitalWrite(pin, LOW);    // turn the LED off by making the voltage LOW
+      delay(500);               // wait for a second
+  }
 }
+
